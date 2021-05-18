@@ -1,13 +1,63 @@
 @import "~bootstrap/scss/bootstrap.scss";
+body{
+    background-color: rgb(248, 244, 237);
+}
 
-/* 
+.container{
 
-    You can write your own styles here...
+}
+
+h1 {
     
     
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
+    font-size: 122px;
+    color: rgb(241, 211, 216);
+}
 
-*/
+.title{
+text-align: center;
+}
+
+input#todo {
+    width: 100%;
+    border: none;
+    font-size: 30px;
+    padding: 10px 30px;
+
+}
+input#todo:focus{
+    outline: none;
+}
+
+ul{
+    font-size: 30px;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px 30px;
+
+
+}
+
+.delete-btn{
+    float:right;
+}
+
+.list{
+    border: #c4c4c4 1px solid;
+    background-color: white;
+}
+
+li{
+    border-top: #c4c4c4 1px solid;
+    padding: 10px 0px;
+}
+.span-bottom{
+        padding: 5px;
+    font-size: 25px;
+
+}
+
+.delete-all{
+float: right;
+
+}
