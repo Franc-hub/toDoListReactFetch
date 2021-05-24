@@ -95,6 +95,17 @@ const ToDoListFetch = () => {
 			.catch(error => console.log("We have an error"));
 	}, []);
 
+	const removeAllToDos = () => {
+		fetch(url, {
+			method: "DELETE"
+		})
+			.then(res => res.json())
+			.then(json => {
+				setTodos(json);
+			})
+			.catch(err => console.log(err));
+	};
+
 	return (
 		<div className="container">
 			<div className="row ">
@@ -161,7 +172,11 @@ const ToDoListFetch = () => {
 									? todos.length + "item left"
 									: "No items left"}
 							</span>
-							<button className="delete-all">{}Hola</button>
+							<button
+								className="delete-all"
+								onClick={removeAllToDos}>
+								Delete all items
+							</button>
 						</div>
 					</div>
 				</div>
