@@ -8,14 +8,6 @@ const ToDoListFetch = () => {
 	const [hover, setHover] = useState(false);
 	const url = "https://assets.breatheco.de/apis/fake/todos/user/franc";
 
-	const options = {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify(todos)
-	};
-
 	const handleChange = e => {
 		setTodo(e.target.value);
 	};
@@ -31,15 +23,33 @@ const ToDoListFetch = () => {
 	};
 
 	const onSubmit = e => {
-		e.preventDefault();
-		if (todo === "") return;
-		addTodo();
-		setTodo("");
+		if (todo !== "") {
+			addTodo();
+			setTodo("");
+		}
 	};
 
-	const removeTodo = todoDone => {
-		const updatedTodos = todos.filter(todo => todo.done !== todoDone);
-		setTodos(updatedTodos);
+	const removeTodo = index => {
+		let newTodos = [];
+		for (let i = 0; i < todos.length; i++) {
+			if (i !== index) {
+				newTodos.push(todos[i]);
+			}
+		}
+		setTodos(newTodos);
+		const options = {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(newTodos)
+		};
+
+		fetch(url, options)
+			.then(res => console.log(res))
+			.then(json => console.log(json))
+			.catch(error => console.log(error));
+		console.log(todos);
 	};
 
 	const toggleTodo = todoDone => {
@@ -50,11 +60,31 @@ const ToDoListFetch = () => {
 		});
 		setTodos(updatedTodos);
 	};
-	const handleKeyPress = e => {
+	const handleKeyPress = async e => {
+		console.log(todos);
 		if (e.key === "Enter" && e.target.value !== "") {
-			addTodo();
-			setTodo("");
-			onSubmit();
+			let add = await addTodo();
+			let set = await setTodo("");
+			let submit = await onSubmit();
+			const options = {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify([
+					...todos,
+					{
+						label: todo,
+						done: true
+					}
+				])
+			};
+
+			fetch(url, options)
+				.then(res => console.log(res))
+				.then(json => console.log(json))
+				.catch(error => console.log(error));
+			console.log(todos);
 		}
 	};
 	// fetch with get
@@ -63,17 +93,7 @@ const ToDoListFetch = () => {
 			.then(res => res.json())
 			.then(json => setTodos(json))
 			.catch(error => console.log("We have an error"));
-	}, [todos]);
-
-	//fetch with put
-
-	useEffect(() => {
-		fetch(url, options)
-			.then(res => console.log(res))
-
-			.then(json => console.log(json))
-			.catch(error => console.log("We have an error"));
-	}, [todos]);
+	}, []);
 
 	return (
 		<div className="container">
@@ -102,7 +122,7 @@ const ToDoListFetch = () => {
 						<div className="col-md-12">
 							<ul>
 								{todos &&
-									todos.map(todo => (
+									todos.map((todo, index) => (
 										<li
 											key={todo.label}
 											onMouseEnter={() => setHover(true)}
@@ -123,7 +143,7 @@ const ToDoListFetch = () => {
 											<span
 												className="delete-btn"
 												onClick={() =>
-													removeTodo(todo.done)
+													removeTodo(index)
 												}>
 												{hover && (
 													<i className="far fa-times-circle"></i>
