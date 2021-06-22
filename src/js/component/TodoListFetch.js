@@ -95,19 +95,28 @@ const ToDoListFetch = () => {
 			.catch(error => console.log("We have an error"));
 	}, []);
 
-	const removeAllToDos = () => {
+	const deleteAll = () => {
+		setTodos([]);
+		doPutFetch();
+	};
+
+	const doPutFetch = () => {
 		fetch(url, {
 			method: "PUT",
+			body: JSON.stringify([]),
 			headers: {
 				"Content-Type": "application/json"
-			},
-			body: JSON.stringify([])
+			}
 		})
-			.then(res => res.json())
-			.then(json => {
-				setTodos(json);
+			.then(resp => {
+				return resp.json();
 			})
-			.catch(err => console.log(err));
+			.then(responseAsJson => {
+				console.log(responseAsJson);
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	};
 
 	return (
@@ -176,10 +185,8 @@ const ToDoListFetch = () => {
 									? todos.length + "item left"
 									: "No items left"}
 							</span>
-							<button
-								className="delete-all"
-								onClick={removeAllToDos}>
-								Delete all items
+							<button className="delete-all" onClick={deleteAll}>
+								Delete all todos
 							</button>
 						</div>
 					</div>
